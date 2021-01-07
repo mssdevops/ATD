@@ -111,7 +111,7 @@ node{
     }
 	 
 	if((env.Branch_Name =~ '.*feature|.releasefix.|.hotfix.|.bugfix.')) {
-		stage('Create Cluster GKE') {
+		stage('To Create Cluster GKE') {
 	withCredentials([file(credentialsId: 'gcp-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
         sh "gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}"
 	sh "gcloud config set project ${projectname}"
