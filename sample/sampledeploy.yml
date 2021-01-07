@@ -2,8 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend
-  namespace: project1-46
-spec:
+  spec:
   replicas: 1
   selector:
     matchLabels:
@@ -17,7 +16,7 @@ spec:
     spec:
       containers:
       - name: mssdevops-284216
-        image: us.gcr.io/mssdevops-284216/project1-46
+        image: us.gcr.io/mssdevops-284216/project1-47
         imagePullPolicy: Always
         ports:
         - containerPort: 80
