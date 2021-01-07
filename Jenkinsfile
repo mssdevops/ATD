@@ -110,7 +110,7 @@ if((env.Branch_Name =~ '.*dev|.master')) {
 	   }
 	}
 	
-if((env.Branch_Name =~ '.*feature|.releasefix.|.hotfix.|.bugfix.')) {
+if((env.Branch_Name =~ '.*feature1|.releasefix.|.hotfix.|.bugfix.')) {
 	stage('To Create Cluster GKE') {
 			withCredentials([file(credentialsId: 'gcp-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
         		sh "gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}"
