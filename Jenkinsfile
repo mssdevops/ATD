@@ -81,23 +81,22 @@ node{
 		sh "sudo docker push us.gcr.io/mssdevops-284216/project2-${BUILD_NUMBER}" 
         }
     }
-    
-	    stage('Create Cluster GKE') {
-	 if((env.Branch_Name =~ '.*dev')) {
-	    withCredentials([file(credentialsId: 'gcp-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
-        sh "gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}"
-	sh "gcloud config set project ${projectname}"
-        sh "gcloud config set compute/zone ${zone}"
-        sh "gcloud config set compute/region ${region}"
-        sh "gcloud auth configure-docker"
-        sh "gcloud config list"
+if((env.Branch_Name =~ '.*dev|.master')) {
+	   stage('Create Cluster GKE') {
+	    	withCredentials([file(credentialsId: 'gcp-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+       	 	sh "gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}"
+		sh "gcloud config set project ${projectname}"
+        	sh "gcloud config set compute/zone ${zone}"
+        	sh "gcloud config set compute/region ${region}"
+        	sh "gcloud auth configure-docker"
+        	sh "gcloud config list"
 		sh "gcloud container clusters create sample-${BUILD_NUMBER} \
---machine-type=e2-medium"
+	--machine-type=e2-medium"
+		}
 	    }
-    
-	    echo "Deploy to kubernetes"
-		    withCredentials([file(credentialsId: 'gcp-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
-			    sh "gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}"
+	   stage('Deploy to kubernetes'){
+		           withCredentials([file(credentialsId: 'gcp-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+		   	   sh "gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}"
 //Configuring the project details to Jenkins and communicate with the gke cluster
                             sh "gcloud config set project ${projectname}"
       			    sh "gcloud config set compute/zone ${zone}"
@@ -107,40 +106,40 @@ node{
                             sh "kubectl create namespace project2-${BUILD_NUMBER}"
 	                    sh "kubectl apply -f sample/sampledeploy.yml -n=project1-${BUILD_NUMBER}"
                             sh "kubectl apply -f test/sampledeploy.yml -n=project2-${BUILD_NUMBER}"
-		    }
-	    }
-      }		
-    
-	 
-	if((env.Branch_Name =~ '.*feature|.releasefix.|.hotfix.|.bugfix.')) {
-		stage('Create Cluster GKE') {
-	withCredentials([file(credentialsId: 'gcp-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
-        sh "gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}"
-	sh "gcloud config set project ${projectname}"
-        sh "gcloud config set compute/zone ${zone}"
-        sh "gcloud config set compute/region ${region}"
-        sh "gcloud auth configure-docker"
-        sh "gcloud config list"
-	sh "gcloud container clusters create sample-${BUILD_NUMBER} \
---machine-type=e2-medium"
-   }
-   
-     }
-   stage('Deploy to kubernetes'){
-        withCredentials([file(credentialsId: 'gcp-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
-	sh "gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}"
+			   }
+	   }
+	}
+	
+if((env.Branch_Name =~ '.*feature|.releasefix.|.hotfix.|.bugfix.')) {
+	stage('To Create Cluster GKE') {
+			withCredentials([file(credentialsId: 'gcp-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+        		sh "gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}"
+			sh "gcloud config set project ${projectname}"
+        		sh "gcloud config set compute/zone ${zone}"
+        		sh "gcloud config set compute/region ${region}"
+        		sh "gcloud auth configure-docker"
+        		sh "gcloud config list"
+			sh "gcloud container clusters create sample-${BUILD_NUMBER} \
+		--machine-type=e2-medium"
+			}
+		}
+	stage('Deploy to kubernetes'){
+       		 withCredentials([file(credentialsId: 'gcp-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+		 sh "gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}"
 //Configuring the project details to Jenkins and communicate with the gke cluster
-         sh "gcloud config set project ${projectname}"
-         sh "gcloud config set compute/zone ${zone}"
-         sh "gcloud config set compute/region ${region}"
-		sh "gcloud container clusters get-credentials sample-${BUILD_NUMBER} --zone ${zone} --project ${projectname}"
-	 sh "kubectl create namespace project1-${BUILD_NUMBER}"
-         sh "kubectl create namespace project2-${BUILD_NUMBER}"
-	 sh "kubectl apply -f sample/sampledeploy.yml -n=project1-${BUILD_NUMBER}"
-         sh "kubectl apply -f test/sampledeploy.yml -n=project2-${BUILD_NUMBER}"
- }
-			} 
-				
+                 sh "gcloud config set project ${projectname}"
+                 sh "gcloud config set compute/zone ${zone}"
+                 sh "gcloud config set compute/region ${region}"
+	       	 sh "gcloud container clusters get-credentials sample-${BUILD_NUMBER} --zone ${zone} --project ${projectname}"
+	         sh "kubectl create namespace samplejava1"
+                 sh "kubectl create namespace samplejava2"
+	         //sh "kubectl apply -f sample/sampledeploy.yml -n=project1-${BUILD_NUMBER}"
+                 //sh "kubectl apply -f test/sampledeploy.yml -n=project2-${BUILD_NUMBER}"
+	          sh "kubectl apply -f sample/sampledeploy.yml
+	           sh "kubectl apply -f test/sampledeploy.yml		 
+		 }
+	} 
+/*				
 stage ('wait_prior_starting_destroy_cluster') {
   echo 'Waiting 5 minutes for deployment to validate prior starting to destroy cluster'
   sleep 300 // seconds
@@ -155,8 +154,6 @@ stage ('wait_prior_starting_destroy_cluster') {
          sh "gcloud container clusters get-credentials sample-${BUILD_NUMBER} --zone ${zone} --project ${projectname}"
 	 sh "gcloud container -q clusters delete sample-${BUILD_NUMBER} --zone=${zone}"
 	}
-	}
-	}
-	
+	}*/
 }
-    
+}
