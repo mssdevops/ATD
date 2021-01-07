@@ -135,8 +135,8 @@ if((env.Branch_Name =~ '.*feature|.releasefix.|.hotfix.|.bugfix.')) {
                  sh "kubectl create namespace samplejava2"
 	         //sh "kubectl apply -f sample/sampledeploy.yml -n=project1-${BUILD_NUMBER}"
                  //sh "kubectl apply -f test/sampledeploy.yml -n=project2-${BUILD_NUMBER}"
-	          sh "kubectl apply -f sample/sampledeploy.yml
-	           sh "kubectl apply -f test/sampledeploy.yml		 
+	          sh "kubectl apply -f sample/sampledeploy.yml"
+	           sh "kubectl apply -f test/sampledeploy.yml"		 
 		 }
 	} 
 /*				
