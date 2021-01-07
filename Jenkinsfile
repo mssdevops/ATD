@@ -102,10 +102,16 @@ if((env.Branch_Name =~ '.*dev|.master')) {
       			    sh "gcloud config set compute/zone ${zone}"
        			    sh "gcloud config set compute/region ${region}"
 			    sh "gcloud container clusters get-credentials sample-${BUILD_NUMBER} --zone ${zone} --project ${projectname}"
-	                    sh "kubectl create namespace project1-${BUILD_NUMBER}"
-                            sh "kubectl create namespace project2-${BUILD_NUMBER}"
-	                    sh "kubectl apply -f sample/sampledeploy.yml -n=project1-${BUILD_NUMBER}"
-                            sh "kubectl apply -f test/sampledeploy.yml -n=project2-${BUILD_NUMBER}"
+	                   // sh "kubectl create namespace project1-${BUILD_NUMBER}"
+                           // sh "kubectl create namespace project2-${BUILD_NUMBER}"
+		            sh "kubectl delete ns samplejava1"
+		             sh "kubectl delete ns samplejava2"		   
+		            sh "kubectl create namespace samplejava1"
+                            sh "kubectl create namespace samplejava2"		   
+	                    //sh "kubectl apply -f sample/sampledeploy.yml -n=project1-${BUILD_NUMBER}"
+                            //sh "kubectl apply -f test/sampledeploy.yml -n=project2-${BUILD_NUMBER}"
+			    sh "kubectl apply -f sample/sampledeploy.yml"
+	                    sh "kubectl apply -f test/sampledeploy.yml"		   
 			   }
 	   }
 	}
