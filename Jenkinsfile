@@ -81,7 +81,7 @@ node{
 		sh "sudo docker push us.gcr.io/mssdevops-284216/project2-${BUILD_NUMBER}" 
         }
     }
-if((env.Branch_Name =~ '.*dev')) {
+if((env.Branch_Name =~ '.*dev|.*master')) {
 	   stage('Create Cluster GKE') {
 	    	withCredentials([file(credentialsId: 'gcp-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
        	 	sh "gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}"
@@ -143,7 +143,7 @@ if((env.Branch_Name =~ '.*feature|.releasefix.|.hotfix.|.bugfix.')) {
 	           sh "kubectl apply -f test/sampledeploy.yml"		 
 		 }
 	} 
-/*				
+				
 stage ('wait_prior_starting_destroy_cluster') {
   echo 'Waiting 5 minutes for deployment to validate prior starting to destroy cluster'
   sleep 300 // seconds
@@ -158,6 +158,6 @@ stage ('wait_prior_starting_destroy_cluster') {
          sh "gcloud container clusters get-credentials sample-${BUILD_NUMBER} --zone ${zone} --project ${projectname}"
 	 sh "gcloud container -q clusters delete sample-${BUILD_NUMBER} --zone=${zone}"
 	}
-	}*/
+	}
 }
 }
