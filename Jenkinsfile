@@ -123,7 +123,7 @@ if((env.Branch_Name =~ '.*feature|.releasefix.|.hotfix.|.bugfix.')) {
 		--machine-type=e2-medium"
 			}
 		}
-	stage('Deploy to kubernetes'){
+	stage('Deploy to kubernetes cluster'){
        		 withCredentials([file(credentialsId: 'gcp-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
 		 sh "gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}"
 //Configuring the project details to Jenkins and communicate with the gke cluster
