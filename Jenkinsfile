@@ -105,7 +105,7 @@ if((env.Branch_Name =~ '.*dev|.*master')) {
 	                   //sh "kubectl create namespace project1-${BUILD_NUMBER}"
                            //sh "kubectl create namespace project2-${BUILD_NUMBER}"
 		            sh "kubectl create namespace samplejava1"
-                            sh "kubectl create namespace atddemo1"		   
+                            sh "kubectl create namespace samplejava2"		   
 	                    //sh "kubectl apply -f sample/sampledeploy.yml -n=project1-${BUILD_NUMBER}"
                             //sh "kubectl apply -f test/sampledeploy.yml -n=project2-${BUILD_NUMBER}"
 			    sh "kubectl apply -f sample/sampledeploy.yml"
