@@ -81,7 +81,7 @@ node{
 		sh "sudo docker push us.gcr.io/mssdevops-284216/project2-${BUILD_NUMBER}" 
         }
     }
-if((env.Branch_Name =~ '.*dev')) {
+if((env.Branch_Name =~ '.*dev|.master')) {
 	   stage('Create Cluster GKE') {
 	    	withCredentials([file(credentialsId: 'gcp-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
        	 	sh "gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}"
@@ -102,14 +102,10 @@ if((env.Branch_Name =~ '.*dev')) {
       			    sh "gcloud config set compute/zone ${zone}"
        			    sh "gcloud config set compute/region ${region}"
 			    sh "gcloud container clusters get-credentials sample-${BUILD_NUMBER} --zone ${zone} --project ${projectname}"
-	                   //sh "kubectl create namespace project1-${BUILD_NUMBER}"
-                           //sh "kubectl create namespace project2-${BUILD_NUMBER}"
-		            sh "kubectl create namespace samplejava1"
-                            sh "kubectl create namespace atddemo1"		   
-	                    //sh "kubectl apply -f sample/sampledeploy.yml -n=project1-${BUILD_NUMBER}"
-                            //sh "kubectl apply -f test/sampledeploy.yml -n=project2-${BUILD_NUMBER}"
-			    sh "kubectl apply -f sample/sampledeploy.yml"
-	                    sh "kubectl apply -f test/sampledeploy.yml"		   
+	                    sh "kubectl create namespace project1-${BUILD_NUMBER}"
+                            sh "kubectl create namespace project2-${BUILD_NUMBER}"
+	                    sh "kubectl apply -f sample/sampledeploy.yml -n=project1-${BUILD_NUMBER}"
+                            sh "kubectl apply -f test/sampledeploy.yml -n=project2-${BUILD_NUMBER}"
 			   }
 	   }
 	}
@@ -135,12 +131,10 @@ if((env.Branch_Name =~ '.*feature|.releasefix.|.hotfix.|.bugfix.')) {
                  sh "gcloud config set compute/zone ${zone}"
                  sh "gcloud config set compute/region ${region}"
 	       	 sh "gcloud container clusters get-credentials sample-${BUILD_NUMBER} --zone ${zone} --project ${projectname}"
-	         sh "kubectl create namespace samplejava1"
-                 sh "kubectl create namespace samplejava2"
-	         //sh "kubectl apply -f sample/sampledeploy.yml -n=project1-${BUILD_NUMBER}"
-                 //sh "kubectl apply -f test/sampledeploy.yml -n=project2-${BUILD_NUMBER}"
-	          sh "kubectl apply -f sample/sampledeploy.yml"
-	           sh "kubectl apply -f test/sampledeploy.yml"		 
+	         sh "kubectl create namespace project1-${BUILD_NUMBER}"
+                 sh "kubectl create namespace project2-${BUILD_NUMBER}"
+	         sh "kubectl apply -f sample/sampledeploy.yml -n=project1-${BUILD_NUMBER}"
+                 sh "kubectl apply -f test/sampledeploy.yml -n=project2-${BUILD_NUMBER}"
 		 }
 	} 
 /*				
@@ -161,3 +155,4 @@ stage ('wait_prior_starting_destroy_cluster') {
 	}*/
 }
 }
+    
