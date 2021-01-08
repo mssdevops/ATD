@@ -102,10 +102,10 @@ if((env.Branch_Name =~ '.*dev|.master')) {
       			    sh "gcloud config set compute/zone ${zone}"
        			    sh "gcloud config set compute/region ${region}"
 			    sh "gcloud container clusters get-credentials sample-${BUILD_NUMBER} --zone ${zone} --project ${projectname}"
-	                    sh "kubectl create namespace project1-${BUILD_NUMBER}"
-                            sh "kubectl create namespace project2-${BUILD_NUMBER}"
-	                    sh "kubectl apply -f sample/sampledeploy.yml -n=project1-${BUILD_NUMBER}"
-                            sh "kubectl apply -f test/sampledeploy.yml -n=project2-${BUILD_NUMBER}"
+	                    sh "kubectl create namespace samplejava1"
+                            sh "kubectl create namespace samplejava2"
+	                    sh "kubectl apply -f sample/sampledeploy.yml"
+                            sh "kubectl apply -f test/sampledeploy.yml"
 			   }
 	   }
 	}
@@ -131,13 +131,13 @@ if((env.Branch_Name =~ '.*feature|.releasefix.|.hotfix.|.bugfix.')) {
                  sh "gcloud config set compute/zone ${zone}"
                  sh "gcloud config set compute/region ${region}"
 	       	 sh "gcloud container clusters get-credentials sample-${BUILD_NUMBER} --zone ${zone} --project ${projectname}"
-	         sh "kubectl create namespace project1-${BUILD_NUMBER}"
-                 sh "kubectl create namespace project2-${BUILD_NUMBER}"
-	         sh "kubectl apply -f sample/sampledeploy.yml -n=project1-${BUILD_NUMBER}"
-                 sh "kubectl apply -f test/sampledeploy.yml -n=project2-${BUILD_NUMBER}"
+	         sh "kubectl create namespace samplejava1"
+                  sh "kubectl create namespace samplejava2"
+	          sh "kubectl apply -f sample/sampledeploy.yml"
+                  sh "kubectl apply -f test/sampledeploy.yml"
 		 }
 	} 
-/*				
+				
 stage ('wait_prior_starting_destroy_cluster') {
   echo 'Waiting 5 minutes for deployment to validate prior starting to destroy cluster'
   sleep 300 // seconds
@@ -152,7 +152,7 @@ stage ('wait_prior_starting_destroy_cluster') {
          sh "gcloud container clusters get-credentials sample-${BUILD_NUMBER} --zone ${zone} --project ${projectname}"
 	 sh "gcloud container -q clusters delete sample-${BUILD_NUMBER} --zone=${zone}"
 	}
-	}*/
+	}
 }
 }
     
